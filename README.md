@@ -16,9 +16,6 @@ Python 3.10 or newer is required.
 
 ### Option 1: install directly from GitHub
 
-This is the simplest option for users who only need to import and use the
-package. It requires Git to be installed:
-
 ```sh
 python3 -m venv .venv
 source .venv/bin/activate
@@ -27,9 +24,6 @@ python -m pip install \
 ```
 
 ### Option 2: clone the repository
-
-Use this option to obtain the examples, synthetic data, and tests as well as
-the package source:
 
 ```sh
 git clone https://github.com/kaichengchen/fullsampleDML-python.git
