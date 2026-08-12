@@ -143,38 +143,16 @@ Every nuisance component may use its own estimator, target, features, scoring
 rule, search space, CV splitter, prediction method, and fit parameters. The
 tuning groups default to the clustering dimension with the fewest distinct
 clusters among the `cluster_cols` passed to `fit_gmm`. Ties are resolved by
-the order of `cluster_cols`. For example,
-
-```python
-result = fit_gmm(
-    ...,
-    cluster_cols=["firm", "market", "year"],
-    nuisance_fit=sklearn_nuisance_fit(specs),
-)
-
-print(result.nuisance.group_columns)
-print(result.nuisance.group_counts)
-```
+the order of `cluster_cols`.
 
 Each `GroupKFold` search above automatically receives that selected group
 vector. Set `NuisanceSpec(groups="firm")` to override the automatic choice
 for one learner. Direct calls to `fit_sklearn_nuisances` can provide the same
 candidate dimensions through `cluster_cols`.
 
-The automatic default is one-way cluster-aware: training and validation do
-not share the selected group identifiers, but they may share identifiers from
-the other clustering dimensions. It is a practical default based on the
-effective sample size, not a tuning rule uniquely required by the paper.
-
-The tuning folds choose hyperparameters; with `refit=True`, each selected learner
-is subsequently fitted on all observations and predicts those same
-observations. These tuning folds are not DML cross-fitting. Search estimators
-with `refit=False` are rejected.
-
-### Strict multiway tuning
-
-Use `MultiwayGroupKFold` when tuning training and validation samples must not
-share identifiers in any clustering dimension:
+The automatic default is one-way cluster-aware. Use `MultiwayGroupKFold` when
+tuning training and validation samples must not share identifiers in any 
+clustering dimension:
 
 ```python
 from fullsampleDML import MultiwayGroupKFold
@@ -205,10 +183,10 @@ train--validation cluster overlap in any requested dimension. With $F$ bins
 in each of $K$ dimensions, it evaluates $F^K$ splits, so it is substantially
 more expensive than the one-way default.
 
-Software compatibility alone does not establish statistical validity. The
-user remains responsible for the nuisance-rate, complexity, orthogonality,
-and dependence conditions in the paper. When practical, tuning procedures
-should account for the dependence structure.
+The tuning folds choose hyperparameters; with `refit=True`, each selected learner
+is subsequently fitted on all observations and predicts those same
+observations. These tuning folds are not DML cross-fitting. Search estimators
+with `refit=False` are rejected.
 
 ## Arbitrary multiway inference
 
